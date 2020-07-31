@@ -16,7 +16,7 @@ const to_tr =
 		<td>${ list.map(v => v.language).join(', ') }</td>
 	</tr>`
 const to_table =
-	videos => `<table>${videos.map(to_tr).join('')}</table>` + style
+	videos => style + `<table>${videos.map(to_tr).join('')}</table>`
 
 const to_csv_row =
 	({ title, videoSeq, subs: { list } }) =>
