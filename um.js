@@ -10,31 +10,22 @@ const get_page =
 		fetch(`https://api-vfan.vlive.tv/v2/channel.${seq}/home?app_id=8c6cc7b45d2568fb668be6e05b6e5a3b${page ? `&next=${page}` : ''}`)
 			.then(r => r.json())
 
-const get =
-	async (seq, until_vseq) => {
-		const videos = []
-		let curr_page = null
+const get_new =
+	async (seq, until_vseq, curr_page=null) => {
+		console.error(`on page ${curr_page}...`)
 
-		while (true) {
-			const { contentList, page: { next } } = await get_page(seq, curr_page)
-			const got_videos = contentList.filter(({ type }) => type === 'VIDEO')
+		const { contentList, page: { next } } = await get_page(seq, curr_page)
 
-			videos.push(...got_videos)
-			curr_page = next
+		if (contentList.length === 0)
+			return []
 
-			console.log(`next: ${next}`)
+		const videos = contentList.filter(c => c.type === 'VIDEO')
 
-			if (got_videos.length === 0)
-				break
+		const last_index = videos.findIndex(vid => vid.videoSeq === until_vseq)
+		if (last_index !== -1)
+			return videos.slice(0, last_index)
 
-			const found_vseq = got_videos.findIndex(vid => vid.videoSeq === until_vseq)
-			if (found_vseq !== -1) {
-				videos.length = found_vseq
-				break
-			}
-		}
-
-		return videos
+		return [...videos, ...await get_new(seq, until_vseq, next)]
 	}
 
 import saving from './saving.js'
@@ -46,7 +37,7 @@ const update =
 
 		const last_seq = (old_videos[0] || {}).videoSeq
 
-		const new_videos = await get(channel_seq(code), last_seq)
+		const new_videos = await get_new(channel_seq(code), last_seq)
 
 		console.log(`got ${new_videos.length} new videos`)
 
