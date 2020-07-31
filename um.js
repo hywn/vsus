@@ -17,16 +17,17 @@ const get =
 
 		while (true) {
 			const { contentList, page: { next } } = await get_page(seq, curr_page)
+			const got_videos = contentList.filter(({ type }) => type === 'VIDEO')
 
-			videos.push(...contentList)
+			videos.push(...got_videos)
 			curr_page = next
 
 			console.log(`next: ${next}`)
 
-			if (contentList.length === 0)
+			if (got_videos.length === 0)
 				break
 
-			const found_vseq = contentList.findIndex(vid => vid.videoSeq === until_vseq)
+			const found_vseq = got_videos.findIndex(vid => vid.videoSeq === until_vseq)
 			if (found_vseq !== -1) {
 				videos.length = found_vseq
 				break
@@ -50,12 +51,10 @@ const update =
 		console.log(`got ${new_videos.length} new videos`)
 
 		if (new_videos.length !== 0)
-			save([...new_videos, ...old_videos])
+			await save([...new_videos, ...old_videos])
+
+		return old_videos
 
 	}
 
-//const seq = channel_seq('BAE889')
-
-//console.log(await get(seq, 198894))
-
-await update('CE2621')
+export { update }

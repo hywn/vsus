@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-net
+#!/usr/bin/env -S deno run --allow-net --allow-read --allow-write
 
 const get_video_info =
 	vid_num =>
@@ -19,4 +19,28 @@ const get_video_subs =
 			.then(info => get_video_json(info))
 			.then(json => json.captions)
 
-console.log(await get_video_subs(195814))
+import saving from './saving.js'
+import { update } from './um.js'
+
+const update_subs =
+	async channel_code =>
+{
+	await update(channel_code)
+
+	const { save, loaded: old_videos } = await saving(`${channel_code}.json`, [])
+
+	for (const video of old_videos) {
+		if (video.subs)
+			continue
+
+		video.subs = (await get_video_subs(video.videoSeq)) || null
+
+		video.subs
+			? console.log(`got subs for ${video.videoSeq}!!`)
+			: console.log(`${video.videoSeq} has no subs ):`)
+	}
+
+	await save(old_videos)
+}
+
+await update_subs('F5F127')
