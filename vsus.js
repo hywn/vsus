@@ -28,18 +28,18 @@ const update_subs =
 
 	const { save, loaded: old_videos } = await saving(`${channel_code}.json`, [])
 
-	for (const video of old_videos) {
-		if (video.subs)
-			continue
+	await Promise.all(
+		old_videos
+			.filter(v => !v.subs)
+			.map(async v => {
+				v.subs = (await get_video_subs(v.videoSeq)) || null
 
-		video.subs = (await get_video_subs(video.videoSeq)) || null
-
-		video.subs
-			? console.log(`got subs for ${video.videoSeq}!!`)
-			: console.log(`${video.videoSeq} has no subs ):`)
-	}
+				v.subs ? console.log(`got subs for ${v.videoSeq}!!`)
+				       : console.log(`${v.videoSeq} has no subs ):`)
+			})
+	)
 
 	await save(old_videos)
 }
 
-await update_subs('F5F127')
+await update_subs('A0ABD1')
