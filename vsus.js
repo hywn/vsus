@@ -21,6 +21,11 @@ const get_video_subs =
 import saving from './saving.js'
 import { update } from './um.js'
 
+const group =
+	n => array =>
+		new Array(Math.ceil(array.length / n)).fill(0)
+			.map((_, i) => array.slice(i * n, (i + 1) * n))
+
 const update_subs =
 	async channel_code =>
 {
@@ -28,18 +33,19 @@ const update_subs =
 
 	const { save, loaded: old_videos } = await saving(`${channel_code}.json`, [])
 
-	await Promise.all(
-		old_videos
-			.filter(v => !v.subs)
-			.map(async v => {
-				v.subs = (await get_video_subs(v.videoSeq)) || null
+	for (const grp of group(500)(old_videos))
+		await Promise.all(
+			grp
+				.filter(v => !v.subs)
+				.map(async v => {
+					v.subs = (await get_video_subs(v.videoSeq)) || null
 
-				v.subs ? console.log(`got subs for ${v.videoSeq}!!`)
-				       : console.log(`${v.videoSeq} has no subs ):`)
-			})
-	)
+					v.subs ? console.log(`got subs for ${v.videoSeq}!!`)
+					       : console.log(`${v.videoSeq} has no subs ):`)
+				})
+		)
 
 	await save(old_videos)
 }
 
-await update_subs('A0ABD1')
+await update_subs('F5F127')
