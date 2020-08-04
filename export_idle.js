@@ -14,7 +14,13 @@ const get_videos =
 const lives = namu_tables.map(get_videos).flat()
 const lives_ids = lives.filter(v => !v.title.includes('V PICK!')).map(v => v.id)
 
-const style =`<style>img { width: 10em }</style>`
+const style =`<style>
+html { display: flex; justify-content: center }
+body { display: grid; grid-template-columns: min-content min-content; grid-gap: 0.2em }
+img { height: 10em; grid-row-end: span 2; justify-self: center }
+h1 { font-size: 2em; width: 16em; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+img, h1, span { border: outset }
+</style>`
 const to_tr =
 	({ title, videoSeq, thumbnail, playTime, subs }) =>
 {
@@ -22,11 +28,12 @@ const to_tr =
 		? subs.list.map(v => v.language).join(', ')
 		: 'no subs ):'
 
-	return `<tr>
-		<td><img src=${thumbnail} /></td>
-		<td><a href="https://vlive.tv/video/${videoSeq}">${title}</a></td>
-		<td>${subs_display}</td>
-	</tr>`
+	return `
+		<img src=${thumbnail} />
+		<h1><a href="https://vlive.tv/video/${videoSeq}">${title}</a><br />${lives.find(v => v.id === videoSeq).title}</h1>
+
+		<span>${subs_display}</span>
+	`
 }
 const to_table =
 	videos => style + `<table>${videos.map(to_tr).join('')}</table>`
