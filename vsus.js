@@ -48,4 +48,4 @@ const update_subs =
 	await save(old_videos)
 }
 
-await update_subs('F5F127')
+await update_subs('CE2621')
