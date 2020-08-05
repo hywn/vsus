@@ -1,13 +1,11 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write --allow-net
-import saving from './saving.js'
 import update_subs from './vsus.js'
 
-await update_subs('F5F127')
-
 const write = path => string => Deno.writeFile(path, new TextEncoder().encode(string))
-const { loaded: all_videos } = await saving('F5F127.json')
 
-const subbed_videos = all_videos.filter(video => video.subs)
+const videos = await update_subs('F5F127')
+
+const subbed_videos = videos.filter(video => video.subs)
 
 const style =`<style>img { width: 10em }</style>`
 const to_tr =

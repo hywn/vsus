@@ -44,6 +44,11 @@ const update_subs =
 		)
 
 	await save(old_videos)
+	return old_videos
 }
 
+// gets new videos
+// gets new subs
+// saves changes to disk
+// and returns ALL videos(+subs)
 export default update_subs
