@@ -1,5 +1,3 @@
-#!/usr/bin/env -S deno run --allow-net --allow-read --allow-write
-
 /// FETCH VLIVE SUBS
 /// main function is `get_video_subs`
 /// get_video_subs(videoseq) => some json describing the video's subs
@@ -48,4 +46,4 @@ const update_subs =
 	await save(old_videos)
 }
 
-await update_subs('CE2621')
+export default update_subs

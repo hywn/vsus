@@ -1,5 +1,9 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write --allow-net
 import saving from './saving.js'
+import update_subs from './vsus.js'
+
+// TODO: reduce I/O operations?
+await update_subs('CE2621')
 
 const write = path => string => Deno.writeFile(path, new TextEncoder().encode(string))
 const { loaded: videos } = await saving('CE2621.json')
