@@ -16,20 +16,26 @@ const get_video_subs =
 	async vid_num =>
 		(await get_video_json(await get_video_info(vid_num))).captions
 
-import saving from './saving.js'
-import { update } from './um.js'
+import { writeJson } from 'https://deno.land/std/fs/write_json.ts'
+import get_videos from './hi.js'
 
 const group =
 	n => array =>
 		new Array(Math.ceil(array.length / n)).fill(0)
 			.map((_, i) => array.slice(i * n, (i + 1) * n))
 
+const wait =
+	ms =>
+		new Promise((res) => setTimeout(res, ms))
+
+
 const update_subs =
 	async channel_code =>
 {
-	await update(channel_code)
-
-	const { save, loaded: old_videos } = await saving(`${channel_code}.json`, [])
+	const old_videos = await get_videos(channel_code)
+	console.log(old_videos[0])
+	console.log('waiting...')
+	await wait(5000)
 
 	for (const grp of group(500)(old_videos))
 		await Promise.all(
@@ -43,7 +49,7 @@ const update_subs =
 				})
 		)
 
-	await save(old_videos)
+	await writeJson(`${channel_code}.json`, old_videos)
 	return old_videos
 }
 
