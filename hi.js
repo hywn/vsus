@@ -5,7 +5,6 @@ const channel_seq =
 		return (parseInt(shuf, 16) + 13) / 8191
 	}
 
-
 const get =
 	seq => page_size => page =>
 		fetch(`https://api-vfan.vlive.tv/vproxy/channelplus/getChannelVideoList?app_id=8c6cc7b45d2568fb668be6e05b6e5a3b&channelSeq=${seq}&maxNumOfRows=${page_size}&pageNo=${page}`)

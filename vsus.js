@@ -28,16 +28,22 @@ const wait =
 	ms =>
 		new Promise((res) => setTimeout(res, ms))
 
-
 const update_subs =
 	async channel_code =>
 {
-	const old_videos = await get_videos(channel_code)
-	console.log(old_videos[0])
-	console.log('waiting...')
-	await wait(5000)
+	// fetch all videos from VLIVE
+	console.log('fetching videos...')
+	const videos = await get_videos(channel_code)
 
-	for (const grp of group(500)(old_videos))
+	// wait for a bit
+	// naver tends to be unpredictably uncooperative
+	// waiting maybe helps ??
+	console.log(`got ${videos.length} videos`)
+	console.log('waiting some time...')
+	await wait(2500)
+
+	// fetch all subs from VLIVE and store in videos
+	for (const grp of group(500)(videos))
 		await Promise.all(
 			grp
 				.filter(v => !v.subs)
@@ -49,12 +55,12 @@ const update_subs =
 				})
 		)
 
-	await writeJson(`${channel_code}.json`, old_videos)
-	return old_videos
+	await writeJson(`${channel_code}.json`, videos)
+	return videos
 }
 
 // gets new videos
 // gets new subs
-// saves changes to disk
+// saves to disk
 // and returns ALL videos(+subs)
 export default update_subs
