@@ -35,7 +35,7 @@ const live_ids = namu.match(/2\.\d\.<\/a>.+?\d{4}년.+?<\/table>/g)
 
 const subbed_lives = subbed_videos.filter(v => live_ids.includes(v.videoSeq))
 
-await write('wjsn/subbed.html')(to_table(subbed_videos))
-await write('wjsn/subbed_lives.html')(to_table(subbed_lives))
-await write('wjsn/subbed.csv')(to_csv(subbed_videos))
-await write('wjsn/subbed_lives.csv')(to_csv(subbed_lives))
+await write('docs/wjsn/subbed.html')(to_table(subbed_videos))
+await write('docs/wjsn/subbed_lives.html')(to_table(subbed_lives))
+await write('docs/wjsn/subbed.csv')(to_csv(subbed_videos))
+await write('docs/wjsn/subbed_lives.csv')(to_csv(subbed_lives))

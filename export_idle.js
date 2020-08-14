@@ -40,4 +40,4 @@ const to_table =
 	videos => style + `<table>${videos.map(to_tr).join('')}</table>`
 
 const html = to_table(videos.filter(v => lives_ids.includes(v.videoSeq)))
-write('idle/lives.html')(html)
+write('docs/idle/lives.html')(html)

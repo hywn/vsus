@@ -50,4 +50,4 @@ const videos = await update_subs('E8D2CB')
 //const videos = JSON.parse(new TextDecoder().decode(await Deno.readFile('E8D2CB.json')))
 
 const html = to_table(videos.filter(v => vlives[v.videoSeq]))
-write('dc/lives.html')(html)
+write('docs/dc/lives.html')(html)
