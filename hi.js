@@ -1,7 +1,7 @@
 const channel_seq =
 	code => {
 		const half = Math.ceil(code.length / 2)
-		const shuf = code.substring(half, code.length) + code.substring(0, half);
+		const shuf = code.substring(half, code.length) + code.substring(0, half)
 		return (parseInt(shuf, 16) + 13) / 8191
 	}
 
