@@ -16,7 +16,6 @@ const get_video_subs =
 	async vid_num =>
 		(await get_video_json(await get_video_info(vid_num))).captions
 
-import { writeJson } from 'https://deno.land/std/fs/write_json.ts'
 import get_videos from './hi.js'
 
 const group =
@@ -55,7 +54,6 @@ const update_subs =
 				})
 		)
 
-	await writeJson(`${channel_code}.json`, videos)
 	return videos
 }
 
