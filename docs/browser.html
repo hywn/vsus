@@ -43,7 +43,7 @@ const make = str => class_name => {
 
 lives.forEach(({ title, namu_title, videoSeq, thumbnail, subs }) => {
 	const i_thumbnail = make('img')('thumbnail')
-	i_thumbnail.src = thumbnail
+	i_thumbnail.src = thumbnail.replace('http://v.phinf.naver.net', 'https://v-phinf.pstatic.net')
 
 	const d_info = make('div')('info')
 	// um kinda bad if loading untrusted json
