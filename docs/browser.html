@@ -1,0 +1,59 @@
+<body></body>
+
+<style>
+html
+	{ display: flex
+	; flex-direction: column
+	; align-items: center
+	}
+body
+	{ display: grid
+	; grid-template-columns: min-content min-content
+	; justify-items: center
+	; align-items:   center
+	}
+.thumbnail
+	{ max-height: 12em
+	}
+.info
+	{ width: 32em
+	; padding: 1em
+	}
+.info h1
+	{ margin:0
+	; white-space: nowrap
+	; overflow: hidden
+	; text-overflow: ellipsis
+	}
+</style>
+
+<script>;(async () => {
+
+const jurl = new URLSearchParams(window.location.search).get('jurl')
+if (!jurl)
+	throw 'no json url'
+
+const lives = await fetch(jurl).then(r => r.json())
+
+const make = str => class_name => {
+	const e = document.createElement(str)
+	e.className = class_name
+	return e
+}
+
+lives.forEach(({ title, namu_title, videoSeq, thumbnail, subs }) => {
+	const i_thumbnail = make('img')('thumbnail')
+	i_thumbnail.src = thumbnail
+
+	const d_info = make('div')('info')
+	// um kinda bad if loading untrusted json
+	d_info.innerHTML = `<h1><a href='https://vlive.tv/video/${videoSeq}'>${title}</a></h1><h1>${namu_title}</h1><p>${
+		subs ? subs.list.map(v => v.language).join(', ')
+		     : 'no subs ):'
+	}</p>`
+
+	document.body.appendChild(i_thumbnail)
+	document.body.appendChild(d_info)
+})
+
+})()</script>

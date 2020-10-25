@@ -1,4 +1,6 @@
 #!/usr/bin/env -S deno run --allow-net --allow-write --allow-read
+import update_subs from './vsus.js'
+const write = path => string => Deno.writeFile(path, new TextEncoder().encode(string))
 
 const main_page = await fetch('https://namu.wiki/w/드림캐쳐(아이돌)/V LIVE').then(r => r.text())
 
@@ -8,7 +10,7 @@ const years_urls = [...main_page.matchAll(/<span id='\d+년'>.+?<\/span>/g)]
 
 const extract_vlive_links = html =>
 	Object.fromEntries([...html.matchAll(/vlive.tv\/video\/(\d+)'>(.*?)<\/a>/g)]
-		.map(m => [+m[1], m[2].replace(/<.+?>/g, '')]))
+		.map(m => [+m[1], { title: m[2].replace(/<.+?>/g, '') }]))
 
 const get_links =
 	subpage_url =>
@@ -16,38 +18,12 @@ const get_links =
 			.then(r => r.text())
 			.then(extract_vlive_links)
 
-const vlives = (await Promise.all(years_urls.map(get_links)))
+const lives = (await Promise.all(years_urls.map(get_links)))
 	.reduce((all, hash) => ({ ...all, ...hash }))
 
-const write = path => string => Deno.writeFile(path, new TextEncoder().encode(string))
-const style =`<style>
-html { display: flex; justify-content: center }
-body { display: grid; grid-template-columns: min-content min-content; grid-gap: 0.2em }
-img { height: 10em; grid-row-end: span 2; justify-self: center }
-h1 { font-size: 2em; width: 16em; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
-img, h1, span { border: outset }
-</style>`
-const to_tr =
-	({ title, videoSeq, thumbnail, playTime, subs }) =>
-{
-	const subs_display = subs
-		? subs.list.map(v => v.language).join(', ')
-		: 'no subs ):'
-
-	return `
-		<img src=${thumbnail} />
-		<h1><a href="https://vlive.tv/video/${videoSeq}">${title}</a><br />${vlives[videoSeq]}</h1>
-
-		<span>${subs_display}</span>
-	`
-}
-const to_table =
-	videos => style + `<table>${videos.map(to_tr).join('')}</table>`
-
-import update_subs from './vsus.js'
-
 const videos = await update_subs('E8D2CB')
-//const videos = JSON.parse(new TextDecoder().decode(await Deno.readFile('E8D2CB.json')))
 
-const html = to_table(videos.filter(v => vlives[v.videoSeq]))
-write('docs/dc/lives.html')(html)
+write('docs/dc.json')(JSON.stringify(
+	videos.filter(v => lives[v.videoSeq])
+	      .map(v => ({ ...v, namu_title: lives[v.videoSeq].title }))
+))
