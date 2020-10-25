@@ -25,6 +25,14 @@ body
 	; overflow: hidden
 	; text-overflow: ellipsis
 	}
+.sub_lang
+	{ font-weight: bold
+	}
+.sub_credit::before { content: '(' }
+.sub_credit::after  { content: ')' }
+.sub_credit
+	{ margin-left: 0.2em
+	}
 </style>
 
 <script>;(async () => {
@@ -47,8 +55,11 @@ lives.forEach(({ title, namu_title, videoSeq, thumbnail, subs }) => {
 
 	const d_info = make('div')('info')
 	// um kinda bad if loading untrusted json
+	// i doubt anyone would take the effort to change their name to some dumb html hack
+	// but should still not do this hacked-together mess; clean up in future please
 	d_info.innerHTML = `<h1><a href='https://vlive.tv/video/${videoSeq}'>${title}</a></h1><h1>${namu_title}</h1><p>${
-		subs ? subs.list.map(v => v.language).join(', ')
+		subs ? subs.list.map(sub => `<span class='sub_lang'>${sub.language}</span>` +
+			(sub.type === 'fan' ? `<span class='sub_credit'>${sub.fanName}</span>` : '')).join(', ')
 		     : 'no subs ):'
 	}</p>`
 
