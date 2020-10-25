@@ -4,7 +4,7 @@ exports
 ## groups
 - [fromis 9](https://hywn.github.io/vsus/browser?jurl=fromis.json)
 - [dreamcatcher](https://hywn.github.io/vsus/browser?jurl=dc.json)
-- [g-idle](https://hywn.github.io/vsus/browser?jurl=idle.json)
+- [idle](https://hywn.github.io/vsus/browser?jurl=idle.json)
 - [oh my girl](https://hywn.github.io/vsus/browser?jurl=omg.json)
 - [wjsn](https://hywn.github.io/vsus/browser?jurl=wjsn.json)
 
