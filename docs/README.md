@@ -3,6 +3,7 @@ quick lists of various groups' vlives with subs info
 
 ## groups
 - [idle](https://hywn.github.io/vsus/browser?jurl=json/idle.json)
+- [fromis](https://hywn.github.io/vsus/browser?jurl=json/fromis.json)
 
 ## info
 i use short scripts which scrape a group's namu page for vlive links. use vsus to get video info (including subs). store in big json file.
