@@ -24,6 +24,4 @@ const json_from_url =
 		return await json_from_info_inkey(info, inkey)
 	}
 
-console.log(JSON.stringify(await json_from_url('https://www.vlive.tv/video/171669')))
-
 export { info_from_url, inkey_from_info, json_from_info_inkey, json_from_url }
