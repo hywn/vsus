@@ -10,7 +10,7 @@ const get_videos =
 		.map(([, vp, id, title]) => ({ title, url: `https://www.vlive.tv/${vp}/${id}` }))
 
 const lives_urls =
-	namu.match(/<span id='\d월_?\d?'>.+?<\/table>/g)
+	namu.match(/<span id='\d+월_?\d*'>.+?<\/table>/g)
 	    .map(get_videos)
 	    .flat()
 	    .filter(v => !v.title.includes('V PICK!'))
