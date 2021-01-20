@@ -40,6 +40,8 @@ const pack = async url => {
 	if (json.captions)
 		officialVideo.subs = json.captions
 
+	delete officialVideo.recommendedVideos
+
 	return officialVideo
 }
 

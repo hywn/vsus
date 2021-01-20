@@ -103,7 +103,6 @@ const processed = table.map(row => {
 
 const my_pack = async ({ url, tags }) => {
 	const info = await pack(url)
-	delete info.recommendedVideos
 	info.tags = tags
 	if (info.title.includes('FM_1.24')) info.tags.push('FM_1.24')
 	if (info.subs)
