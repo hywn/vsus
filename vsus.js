@@ -2,7 +2,7 @@ const info_from_url =
 	url =>
 		fetch(url)
 			.then(r => r.text())
-			.then(t => t.match(/(?<=window\.__PRELOADED_STATE__=).+?(?=<\/script>)/s)[0])
+			.then(t => t.match(/(?<=window\.__PRELOADED_STATE__=).+?(?=,function)/s)[0])
 			.then(t => JSON.parse(t))
 
 const inkey_from_info =
