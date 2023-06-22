@@ -1,4 +1,7 @@
 # vsus
+
+**note: as of 2023 naver vlive is no more**
+
 javascript utility for fetching vlive video info
 
 most useful function is the async `json_from_url`, which given a url to vlive video gives you a lot of info including video streams and caption info
